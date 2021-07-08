@@ -1,0 +1,7 @@
+production:
+  adapter: postgresql
+  host: <%= ENV['DB_HOST'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  reconnect: true
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>
