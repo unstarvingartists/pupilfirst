@@ -1,0 +1,3 @@
+CREATE USER CREATEDB;
+CREATE DATABASE vscode WITH OWNER vscode;
+GRANT EXECUTE ON FUNCTION pg_stat_statements_reset() TO vscode;
