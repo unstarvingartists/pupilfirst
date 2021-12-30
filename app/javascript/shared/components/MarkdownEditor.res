@@ -1,6 +1,23 @@
 exception InvalidModeForPreview
+type sdkButton
+%raw(`require("./MarkdownEditor.css")`)
+@module("@loomhq/loom-sdk")
+external isSupported: unit => Js.Promise.t<{"supported": bool, "error": string}> = "isSupported"
+@module("@loomhq/loom-sdk")
+external setup: {"apiKey": string} => Js.Promise.t<{
+  "configureButton": {"element": Dom.element} => sdkButton,
+}> = "setup"
+@module("@loomhq/loom-embed")
+external oembed: (string, {"width": int}) => Js.Promise.t<{"html": string}> = "oembed"
 
-%bs.raw(`require("./MarkdownEditor.css")`)
+@send
+external on: (
+  sdkButton,
+  @string
+  [
+    | #"insert-click"({"sharedUrl": string} => unit)
+  ],
+) => unit = "on"
 
 let str = React.string
 
@@ -164,8 +181,7 @@ let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
   head ++ (wrapper ++ (selection ++ (wrapper ++ tail)))
 }
 
-@ocaml.doc(
-  "
+@ocaml.doc("
   * After changing the Markdown using any of the controls or key commands, the
   * textarea element will need to be manually \"synced\" in two ways:
   *
@@ -179,8 +195,7 @@ let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
   * This function is making an assumption that re-render can happen in 25ms.
   * The need for these manual adjustments can be visibly seen by increasing the
   * renderDelay to something like 1000ms.
- *"
-)
+ *")
 let updateTextareaAfterDelay = (state, (startPosition, endPosition)) => {
   let renderDelay = 25 //ms
 
@@ -299,6 +314,9 @@ let controls = (disabled, value, state, send, onChange) => {
       </div>
     }}
     <div className="py-1">
+      <button id={"BUTTON_ID"} className={buttonClasses ++ "rounded ml-1 hidden md:inline"}>
+        <i className="fas fa-video fa-fw" />
+      </button>
       <button
         disabled className={"rounded " ++ buttonClasses} onClick={onClickPreview(state, send)}>
         {modeIcon(#Preview, mode)}
@@ -465,8 +483,8 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
     <div className={footerContainerClasses(state.mode)}>
       {<form
         className={`flex items-center flex-wrap flex-1 text-sm font-semibold ${disabled
-          ? ""
-          : "hover:bg-gray-300 hover:text-primary-500"}`}
+            ? ""
+            : "hover:bg-gray-300 hover:text-primary-500"}`}
         id=fileFormId>
         <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
         <input
@@ -551,8 +569,8 @@ let handleKeyboardControls = (value, state, send, onChange, event) => {
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
 
   switch event |> Webapi.Dom.KeyboardEvent.key {
-  | "b" when event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Bold)
-  | "i" when event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Italic)
+  | "b" if event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Bold)
+  | "i" if event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Italic)
   | _anyOtherKey => ()
   }
 }
@@ -650,6 +668,38 @@ let make = (
           Webapi.Dom.EventTarget.removeKeyDownEventListener(curriedHandler),
         ),
     )
+  })
+
+  let (videoHtml, setVideoHtml) = React.useState(() => "")
+  React.useEffect0(() => {
+    open Webapi.Dom
+    switch document |> Document.getElementById("BUTTON_ID") {
+    | Some(button) =>
+      setup({
+        "apiKey": "INSERT_API_KEY",
+      })
+      |> Js.Promise.then_(res => {
+        let sdkButton = res["configureButton"]({"element": button})
+        sdkButton->on(
+          #"insert-click"(
+            video => {
+              oembed(video["sharedUrl"], {"width": 400})
+              |> Js.Promise.then_(res => {
+                let html = res["html"]
+
+                setVideoHtml(_ => html)
+                Js.Promise.resolve()
+              })
+              |> ignore
+            },
+          ),
+        )
+        Js.Promise.resolve()
+      })
+      |> ignore
+    | None => ()
+    }
+    None
   })
 
   React.useEffect1(() => {

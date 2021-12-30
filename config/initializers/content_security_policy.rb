@@ -49,12 +49,16 @@ Rails.application.config.content_security_policy do |policy|
     { connect: 'https://api.rollbar.com' }
   end
 
+  def loom_video
+    { url: 'https://www.loom.com' }
+  end
+
   def style_sources
     ['fonts.googleapis.com', asset_host] - [nil]
   end
 
   def connect_sources
-    sources = [rollbar_csp[:connect], *vimeo_csp[:connect]]
+    sources = [rollbar_csp[:connect],loom_video[:url], *vimeo_csp[:connect]]
     sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
     sources
   end
@@ -69,7 +73,7 @@ Rails.application.config.content_security_policy do |policy|
 
   def frame_sources
     [
-      'https://www.google.com', typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame], recaptcha_csp[:frame]
+      'https://www.google.com','https://www.loom.com', typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame], recaptcha_csp[:frame]
     ]
   end
 
