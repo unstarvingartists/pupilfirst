@@ -542,12 +542,14 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
   }
 }
 
-let textareaClasses = mode =>
-  "editor w-full outline-none font-mono " ++
+let textareaClasses = (mode, dynamicHeight) => {
+  let editorClasses = dynamicHeight ? "w-full outline-none font-mono " : "editor w-full outline-none font-mono "
+  editorClasses ++
   switch mode {
   | Windowed(_) => "p-3"
   | Fullscreen(_) => "editor--full-screen px-3 pt-4 pb-8 h-full resize-none"
   }
+}
 
 let onChangeWrapper = (onChange, event) => {
   let value = ReactEvent.Form.target(event)["value"]
@@ -626,6 +628,7 @@ let make = (
   ~tabIndex=?,
   ~fileUpload=true,
   ~disabled=false,
+  ~dynamicHeight=false,
 ) => {
   let (state, send) = React.useReducerWithMapState(
     reducer,
@@ -726,7 +729,7 @@ let make = (
             onChange={onChangeWrapper(onChange)}
             id=state.id
             value
-            className={textareaClasses(state.mode)}
+            className={textareaClasses(state.mode, dynamicHeight)}
             disabled
           />
         </DisablingCover>
