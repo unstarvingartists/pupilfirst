@@ -279,7 +279,7 @@ let showSubmissionStatus = submission =>
   }
 
 let submissionCardClasses = submission =>
-  "flex flex-col md:flex-row items-start md:items-center justify-between rounded-lg bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-2 focus:border-blue-500 " ++
+  "flex flex-col md:flex-row items-start md:items-center justify-between rounded-lg bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-2 focus:border-indigo-500 " ++
   switch submission |> Submission.status {
   | #Rejected => "border-red-500"
   | #Completed => "border-green-500"
@@ -302,7 +302,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
       <div
         className=""
         key={submission |> Submission.id}>
-        <a className="block relative z-10 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-blue-500"
+        <a className="block relative z-10 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-indigo-500"
           ariaLabel={"Student submission " ++ (submission |> Submission.id)}
           href=submissionHref>
           <div
@@ -334,7 +334,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
         {teamMismatch
           ? <div
               ariaLabel={"Team change notice for submission " ++ Submission.id(submission)}
-              className="w-full text-xs rounded-b bg-blue-100 text-blue-700 px-4 pt-3 pb-2 -mt-1 flex flex-1 justify-between items-center">
+              className="w-full text-xs rounded-b bg-indigo-100 text-indigo-700 px-4 pt-3 pb-2 -mt-1 flex flex-1 justify-between items-center">
               <div className="flex flex-1 justify-start items-center pr-8">
                 <FaIcon classes="fas fa-exclamation-triangle text-sm md:text-base mt-1" />
                 <div className="inline-block pl-3">
@@ -348,7 +348,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
               </div>
               <a
                 href={"/targets/" ++ Submission.targetId(submission)}
-                className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-200 hover:text-blue-800 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-indigo-700 hover:bg-indigo-200 hover:text-indigo-800 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                 <span className="hidden md:inline"> {tc("view") |> str} </span>
                 {ts("target") |> str}
                 <FaIcon classes="fas fa-arrow-right ml-2" />
@@ -428,7 +428,7 @@ let make = (
           {switch state.loading {
           | Loaded =>
             <button
-              className="btn btn-primary-ghost cursor-pointer w-full mt-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              className="btn btn-primary-ghost cursor-pointer w-full mt-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
               onClick={_ => {
                 send(BeginLoadingMore)
                 getStudentSubmissions(

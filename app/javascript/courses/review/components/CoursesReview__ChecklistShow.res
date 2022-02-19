@@ -95,7 +95,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
     <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
         <button
-          className="btn btn-subtle focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition"
+          className="btn btn-subtle focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
           onClick=cancelCB>
           <FaIcon classes="fas fa-arrow-left" /> <p className="pl-2"> {str("Back to Review")} </p>
         </button>
