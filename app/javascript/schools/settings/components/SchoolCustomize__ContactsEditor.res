@@ -148,7 +148,7 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
         key="contacts-editor__update-button"
         disabled={updateButtonDisabled(state)}
         onClick={handleUpdateContactDetails(state, send, updateAddressCB, updateEmailAddressCB)}
-        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+        className="w-full bg-blue-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
         {updateContactDetailsButtonText(state.updating) |> str}
       </button>
     </DisablingCover>

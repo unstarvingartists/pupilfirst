@@ -36,10 +36,10 @@ let selectedButtonIcon = kind =>
 let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind
   let selectedButtonColor = switch selectedKind {
-  | LongText => "blue"
+  | LongText => "indigo"
   | ShortText => "orange"
   | Files => "pink"
-  | Link => "indigo"
+  | Link => "blue"
   | AudioRecord => "red"
   | MultiChoice(_choices) => "teal"
   }
