@@ -109,7 +109,7 @@ let make = (~name, ~about, ~updateDetailsCB) => {
         key="details-editor__update-button"
         onClick={_ => updateSchoolQuery(state, send, updateDetailsCB)}
         disabled={updateButtonDisabled(state)}
-        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+        className="w-full bg-blue-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
         {updateButtonText(state.saving) |> str}
       </button>
     </DisablingCover>
